@@ -63,15 +63,18 @@ class JobTracker:
 
     async def run_check(self, force_notify: bool = False):
         """Run a single iteration of the job check loop."""
+        from src.utils.logger import time_operation
+        
         log.info("Starting job check cycle...")
         
         # 1. Fetch raw summaries
-        with CSCScraper(self.scraper_config) as scraper:
-            summaries = scraper.fetch_job_listings()
-            
-            if not summaries:
-                log.info("No job listings found.")
-                return
+        with time_operation("full_scraping_cycle"):
+            with CSCScraper(self.scraper_config) as scraper:
+                summaries = scraper.fetch_job_listings()
+                
+                if not summaries:
+                    log.info("No job listings found.")
+                    return
 
             log.info(f"Fetched {len(summaries)} job summaries. Filtering...")
             

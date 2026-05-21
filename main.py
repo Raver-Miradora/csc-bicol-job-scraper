@@ -7,6 +7,7 @@ Commands:
   stats       Display tracking statistics
   config      Configure notification settings
   test        Test notification delivery
+  dashboard   View live metrics dashboard
 
 Usage:
     python main.py start
@@ -14,6 +15,7 @@ Usage:
     python main.py stats
     python main.py config --setup
     python main.py test
+    python main.py dashboard
 """
 
 import sys
@@ -107,10 +109,49 @@ def setup_config():
     else:
         print("No tokens provided. Setup skipped.")
 
+def view_dashboard():
+    import json
+    from rich.console import Console
+    from rich.table import Table
+    
+    console = Console()
+    table = Table(title="CSC Job Scraper Performance Metrics")
+    
+    table.add_column("Timestamp", style="cyan")
+    table.add_column("Operation", style="magenta")
+    table.add_column("Duration (s)", justify="right", style="green")
+    
+    log_path = "logs/tracker.json.log"
+    if not os.path.exists(log_path):
+        console.print(f"[red]No metrics found at {log_path}[/red]")
+        return
+        
+    # Read the last 20 metrics
+    metrics = []
+    with open(log_path, 'r', encoding='utf-8') as f:
+        for line in f:
+            try:
+                data = json.loads(line)
+                record = data.get("record", {})
+                extra = record.get("extra", {})
+                if "metric_operation" in extra:
+                    metrics.append({
+                        "time": record.get("time", {}).get("repr", ""),
+                        "op": extra["metric_operation"],
+                        "duration": f"{extra['metric_duration_s']:.3f}"
+                    })
+            except json.JSONDecodeError:
+                pass
+                
+    for m in metrics[-20:]:
+        table.add_row(m["time"], m["op"], m["duration"])
+        
+    console.print(table)
+
 def main():
     args = sys.argv[1:]
     if not args:
-        print("Usage: python main.py [start|check|stats|config|test]")
+        print("Usage: python main.py [start|check|stats|config|test|dashboard]")
         return
         
     cmd = args[0].lower()
@@ -129,9 +170,11 @@ def main():
             setup_config()
         else:
             print("Usage: python main.py config --setup")
+    elif cmd == "dashboard":
+        view_dashboard()
     else:
         print(f"Unknown command: {cmd}")
-        print("Usage: python main.py [start|check|stats|config|test]")
+        print("Usage: python main.py [start|check|stats|config|test|dashboard]")
 
 if __name__ == "__main__":
     main()
