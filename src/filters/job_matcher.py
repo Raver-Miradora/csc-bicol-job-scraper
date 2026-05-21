@@ -4,8 +4,8 @@ job_matcher.py — Combined filtering logic (region + eligibility).
 Implemented in Phase 5: Filtering Logic.
 """
 
-from src.filters.region_filter import RegionFilter
 from src.filters.eligibility_filter import EligibilityFilter
+from src.filters.region_filter import RegionFilter
 from src.utils.logger import get_logger
 
 log = get_logger(__name__)
@@ -25,7 +25,7 @@ class JobMatcher:
         self.config = config or {}
         self.region_filter = RegionFilter()
         self.eligibility_filter = EligibilityFilter()
-        
+
         self.min_sg = int(self.config.get("salary_grade_min", 0))
         self.require_bicol = self.config.get("require_bicol_region", True)
         self.require_partido = self.config.get("require_partido_district", False)
@@ -37,7 +37,7 @@ class JobMatcher:
         location = job_data.get("location", "")
         eligibility = job_data.get("eligibility_requirements", "")
         salary_grade_str = job_data.get("salary_grade", "")
-        
+
         # 1. Salary Grade Check
         if self.min_sg > 0:
             sg = self.eligibility_filter.parse_salary_grade(salary_grade_str)

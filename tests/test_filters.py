@@ -6,9 +6,11 @@ Run with:
 """
 
 import pytest
-from src.filters.region_filter import RegionFilter
+
 from src.filters.eligibility_filter import EligibilityFilter
 from src.filters.job_matcher import JobMatcher
+from src.filters.region_filter import RegionFilter
+
 
 class TestRegionFilter:
     def setup_method(self):
@@ -113,7 +115,7 @@ class TestJobMatcher:
             "require_partido_district": True,
             "require_bicol_region": True
         })
-        
+
         job1 = {
             "location": "Tigaon, Camarines Sur",
             "eligibility_requirements": "CS Professional",
@@ -122,7 +124,7 @@ class TestJobMatcher:
             "location": "Naga City",
             "eligibility_requirements": "CS Professional",
         }
-        
+
         assert jm_partido.is_match(job1) is True
         assert jm_partido.is_match(job2) is False
 
@@ -132,7 +134,7 @@ class TestJobMatcher:
             {"position_title": "Job 2", "location": "Camarines Sur", "eligibility_requirements": "None", "salary_grade": "15"},
             {"position_title": "Job 3", "location": "Albay", "eligibility_requirements": "RA 1080", "salary_grade": "11"},
         ]
-        
+
         filtered = self.jm.filter_jobs(jobs)
         assert len(filtered) == 1
         assert filtered[0]["position_title"] == "Job 3"

@@ -6,8 +6,9 @@ Implemented in Phase 6: Telegram Notifications.
 
 from telegram import Bot
 from telegram.error import TelegramError
+
+from src.notifications.message_formatter import format_daily_summary, format_telegram_message
 from src.utils.logger import get_logger
-from src.notifications.message_formatter import format_telegram_message, format_daily_summary
 
 log = get_logger(__name__)
 
@@ -31,7 +32,7 @@ class TelegramNotifier:
             return False
 
         message = self.format_message(job_data)
-        
+
         try:
             await self.bot.send_message(
                 chat_id=self.chat_id,
@@ -62,7 +63,7 @@ class TelegramNotifier:
             return False
 
         message = format_daily_summary(jobs)
-        
+
         try:
             await self.bot.send_message(
                 chat_id=self.chat_id,

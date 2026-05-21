@@ -6,8 +6,9 @@ Usage:
     python scripts/manual_check.py
 """
 
-import sys
 import asyncio
+import sys
+
 from src.core.tracker import JobTracker
 from src.utils.logger import get_logger
 

@@ -14,6 +14,7 @@ Note on portal structure:
 
 import re
 from typing import Optional
+
 from bs4 import BeautifulSoup, Tag
 
 from src.utils.logger import get_logger
@@ -351,7 +352,7 @@ def extract_pagination_urls(html: str, base_url: str) -> list[str]:
     Returns a list of absolute URLs for pages 2, 3, … N.
     Page 1 is assumed already fetched and is NOT included.
     """
-    from urllib.parse import urljoin, urlparse, parse_qs, urlencode, urlunparse
+    from urllib.parse import parse_qs, urlencode, urljoin, urlparse, urlunparse
 
     soup = BeautifulSoup(html, "lxml")
     urls: list[str] = []

@@ -12,9 +12,10 @@ Handles all database interactions:
 import hashlib
 import sqlite3
 from contextlib import contextmanager
-from datetime import datetime, date, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Generator, List, Optional
+
 
 # Timezone-aware UTC helper (replaces deprecated datetime.utcnow())
 def _now() -> datetime:

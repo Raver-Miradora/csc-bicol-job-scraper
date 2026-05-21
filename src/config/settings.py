@@ -5,9 +5,11 @@ Implemented in Phase 8: Configuration Management.
 """
 
 import os
-import yaml
 from pathlib import Path
+
+import yaml
 from dotenv import load_dotenv
+
 from src.utils.logger import get_logger
 
 log = get_logger(__name__)
@@ -59,11 +61,11 @@ class Settings:
     def validate(self) -> bool:
         """Validate critical configuration settings."""
         valid = True
-        
+
         # Check basic structure
         if 'filters' not in self._config:
             log.warning("Config missing 'filters' section. Default filters will be used.")
-            
+
         if 'notifications' not in self._config:
             log.warning("Config missing 'notifications' section.")
 
@@ -72,15 +74,15 @@ class Settings:
         if telegram_enabled and not os.getenv("TELEGRAM_BOT_TOKEN"):
             log.error("Telegram is enabled in config but TELEGRAM_BOT_TOKEN is missing in .env")
             valid = False
-            
+
         discord_enabled = self.get('notifications.discord.enabled', False)
         if discord_enabled and not os.getenv("DISCORD_WEBHOOK_URL"):
             log.error("Discord is enabled in config but DISCORD_WEBHOOK_URL is missing in .env")
             valid = False
-            
+
         if not valid:
             log.error("Configuration validation failed.")
-            
+
         return valid
 
 
