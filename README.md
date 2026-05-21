@@ -17,9 +17,7 @@
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
-- [Project Structure](#project-structure)
 - [How It Works](#how-it-works)
-- [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -27,11 +25,11 @@
 
 ## Overview
 
-This system acts as a **personal HR assistant** for government job seekers in the Bicol Region. It continuously monitors the [CSC Career Opportunities Portal](https://www.csc.gov.ph/career-opportunities/) and delivers real-time alerts for positions matching:
+This system acts as a **personal HR assistant** for government job seekers in the Bicol Region. It continuously monitors the [CSC Career Opportunities Portal](https://csc.gov.ph/career/) and delivers real-time alerts for positions matching:
 
-- 📍 **Geographic Focus**: Bicol Region (Region V) — Camarines Sur, Camarines Norte, Albay, Sorsogon, Catanduanes, Masbate; with special attention to **Partido district** municipalities
-- ✅ **Eligibility**: Career Service Professional (CS Professional / Second Level Eligibility / RA 1080)
-- 💼 **Any salary grade** (configurable minimum threshold)
+- **Geographic Focus**: Bicol Region (Region V) — Camarines Sur, Camarines Norte, Albay, Sorsogon, Catanduanes, Masbate; with special attention to **Partido district** municipalities
+- **Eligibility**: Career Service Professional (CS Professional / Second Level Eligibility / RA 1080)
+- **Any salary grade** (configurable minimum threshold)
 
 ---
 
@@ -39,15 +37,15 @@ This system acts as a **personal HR assistant** for government job seekers in th
 
 | Feature | Description |
 |---|---|
-| 🔍 **Automated Scraping** | Continuously monitors CSC portal with respectful rate limiting |
-| 🎯 **Smart Filtering** | Region, district, and eligibility-based filtering |
-| 📲 **Telegram Alerts** | Instant notifications via Telegram Bot |
-| 💬 **Discord Embeds** | Rich embed notifications via Discord Webhook |
-| 🗄️ **Local Storage** | SQLite database — no data leaves your machine |
-| 📊 **Daily Summaries** | Scheduled digest of all new job postings |
-| 🔁 **Idempotent** | Never sends duplicate notifications for the same job |
-| 📝 **Audit Logging** | Complete logs of all scraping and notification activity |
-| ⚙️ **YAML Config** | Easy filter adjustments without touching code |
+| **Automated Scraping** | Continuously monitors CSC portal with respectful rate limiting |
+| **Smart Filtering** | Region, district, and eligibility-based filtering |
+| **Telegram Alerts** | Instant notifications via Telegram Bot |
+| **Discord Embeds** | Rich embed notifications via Discord Webhook |
+| **Local Storage** | SQLite database — no data leaves your machine |
+| **Daily Summaries** | Scheduled digest of all new job postings |
+| **Idempotent** | Never sends duplicate notifications for the same job |
+| **Audit Logging** | Complete logs of all scraping and notification activity |
+| **YAML Config** | Easy filter adjustments without touching code |
 
 ---
 
@@ -160,32 +158,6 @@ python main.py test
 
 ---
 
-## Project Structure
-
-```
-csc-bicol-job-scraper/
-│
-├── src/
-│   ├── scraper/        # HTTP session, CSC portal scraping, HTML parsers
-│   ├── filters/        # Region, district, and eligibility filters
-│   ├── storage/        # SQLite database layer and data models
-│   ├── notifications/  # Telegram bot and Discord webhook integrations
-│   ├── config/         # YAML config loader and constants
-│   └── utils/          # Logger, validators
-│
-├── config/
-│   ├── config.yaml     # User configuration
-│   └── .env.example    # Environment variable template
-│
-├── data/               # SQLite database (gitignored)
-├── logs/               # Application logs (gitignored)
-├── tests/              # Unit and integration tests
-├── scripts/            # DB init and manual run helpers
-└── main.py             # CLI entry point
-```
-
----
-
 ## How It Works
 
 ```
@@ -206,18 +178,6 @@ CSC Portal ──► HTTP Scraper ──► HTML Parser ──► Region Filter 
 3. New jobs are filtered by region, district, and eligibility
 4. Matching jobs are saved to SQLite and notifications are sent
 5. A daily summary is delivered at a configurable time
-
----
-
-## Troubleshooting
-
-| Problem | Solution |
-|---|---|
-| `No jobs found` | Check `config.yaml` filters; CSC portal structure may have changed |
-| `Telegram not sending` | Verify `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` in `.env` |
-| `Database error` | Run `python scripts/init_db.py` to re-initialize |
-| `Rate limit hit` | Increase `check_interval_minutes` in `config.yaml` |
-| `JS-rendered content` | Set `use_playwright: true` in scraper config (advanced) |
 
 ---
 
