@@ -1,0 +1,83 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  CSC Bicol Job Scraper — Main Configuration
+#  All sensitive values (tokens, URLs) are injected from .env
+# ─────────────────────────────────────────────────────────────────────────────
+
+scraper:
+  base_url: "https://www.csc.gov.ph/career-opportunities/"
+  check_interval_minutes: 60
+  max_retries: 3
+  timeout_seconds: 30
+  # Delay between requests (seconds) — be a good citizen of CSC servers
+  rate_limit_seconds: 3
+  # Set to true if CSC portal starts requiring JS rendering (needs playwright)
+  use_playwright: false
+
+filters:
+  regions:
+    - "Bicol Region"
+    - "Region V"
+    - "Region 5"
+
+  districts:
+    - "Partido"
+
+  provinces:
+    - "Camarines Sur"
+    - "Camarines Norte"
+    - "Albay"
+    - "Sorsogon"
+    - "Catanduanes"
+    - "Masbate"
+
+  # Partido district municipalities (Camarines Sur)
+  partido_municipalities:
+    - "Lagonoy"
+    - "Goa"
+    - "San Jose"
+    - "Tigaon"
+    - "Sagñay"
+    - "Tinambac"
+    - "Siruma"
+    - "Garchitorena"
+    - "Presentacion"
+    - "Caramoan"
+    - "Libmanan"
+
+  eligibilities:
+    - "Career Service Professional"
+    - "CS Professional"
+    - "Second Level Eligibility"
+    - "RA 1080"
+
+  # Optional: only track jobs at or above this salary grade (set to 1 for all)
+  salary_grade_min: 1
+
+notifications:
+  telegram:
+    enabled: true
+    bot_token: "${TELEGRAM_BOT_TOKEN}"
+    chat_id: "${TELEGRAM_CHAT_ID}"
+
+  discord:
+    enabled: false
+    webhook_url: "${DISCORD_WEBHOOK_URL}"
+
+  # Send a daily digest summary of all new jobs found that day
+  daily_summary: true
+  summary_time: "18:00"  # 6 PM Philippine Standard Time (PST / UTC+8)
+
+  # Batch notifications if multiple new jobs found in one cycle
+  batch_notifications: true
+
+database:
+  path: "data/jobs.db"
+  backup_enabled: true
+  backup_interval_days: 7
+
+logging:
+  level: "INFO"           # DEBUG | INFO | WARNING | ERROR
+  file: "logs/tracker.log"
+  max_bytes: 10485760     # 10 MB per log file
+  backup_count: 5         # Keep 5 rotated log files
+  colorize: true          # Rich color output in terminal
