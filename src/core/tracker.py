@@ -78,10 +78,15 @@ class JobTracker:
 
             log.info(f"Fetched {len(summaries)} job summaries. Filtering...")
             
-            # 2. Filter using JobMatcher (first pass based on summary info like Location/Title)
-            # Many listings already have location and basic info.
-            # If the matcher is strict, this saves fetching details for everything.
-            potential_matches = self.matcher.filter_jobs(summaries)
+            # 2. Filter using JobMatcher's region filter (first pass based on summary info like Location)
+            potential_matches = []
+            for summary in summaries:
+                loc = summary.get("location", "")
+                if self.matcher.require_bicol and not self.matcher.region_filter.is_bicol_region(loc):
+                    continue
+                if self.matcher.require_partido and not self.matcher.region_filter.is_partido_district(loc):
+                    continue
+                potential_matches.append(summary)
             log.info(f"Found {len(potential_matches)} potential matches after summary filter.")
             
             new_matches = []
