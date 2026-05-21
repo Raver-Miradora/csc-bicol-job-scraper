@@ -7,6 +7,7 @@ Implemented in Phase 5: Filtering Logic.
 import re
 import unicodedata
 
+
 class RegionFilter:
     """Geographic filtering for Bicol Region V and Partido district."""
 

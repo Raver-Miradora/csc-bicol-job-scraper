@@ -13,7 +13,7 @@ def format_telegram_message(job_data: dict) -> str:
     monthly_salary = job_data.get('monthly_salary', 'N/A')
     deadline = job_data.get('application_deadline', 'Unknown Deadline')
     job_url = job_data.get('job_url', '#')
-    
+
     # We use basic HTML tags supported by Telegram parse_mode='HTML'
     msg = f"🏛️ <b>New Job Posting</b>\n\n"
     msg += f"📌 <b>Position:</b> {title}\n"
@@ -21,10 +21,10 @@ def format_telegram_message(job_data: dict) -> str:
     msg += f"📍 <b>Location:</b> {location}\n"
     msg += f"💰 <b>Salary:</b> SG {salary_grade} - {monthly_salary}\n"
     msg += f"⏳ <b>Deadline:</b> {deadline}\n\n"
-    
+
     if job_url != '#':
         msg += f'<a href="{job_url}">🔗 View Full Details & Apply</a>'
-        
+
     return msg
 
 def format_discord_embed(job_data: dict) -> dict:
@@ -36,7 +36,7 @@ def format_discord_embed(job_data: dict) -> dict:
     monthly_salary = job_data.get('monthly_salary', 'N/A')
     deadline = job_data.get('application_deadline', 'Unknown Deadline')
     job_url = job_data.get('job_url', '#')
-    
+
     # Discord blue color: 0x3498db (3447003 in decimal)
     # Default URL to CSC jobs page if none provided
     if job_url == '#':
@@ -53,20 +53,20 @@ def format_discord_embed(job_data: dict) -> dict:
             {'name': '⏳ Deadline', 'value': deadline, 'inline': True}
         ]
     }
-    
+
     return embed_dict
 
 def format_daily_summary(jobs: list) -> str:
     """Format a daily summary of all new jobs found."""
     if not jobs:
         return "📊 <b>Daily CSC Job Summary</b>\n\nNo new jobs found matching your criteria today."
-        
+
     msg = f"📊 <b>Daily CSC Job Summary</b>\n\n"
     msg += f"Found <b>{len(jobs)}</b> new job(s) matching your criteria:\n\n"
-    
+
     for i, job in enumerate(jobs, 1):
         title = job.get('position_title', 'Unknown Position')
         agency = job.get('agency', 'Unknown Agency')
         msg += f"{i}. <b>{title}</b> at {agency}\n"
-        
+
     return msg

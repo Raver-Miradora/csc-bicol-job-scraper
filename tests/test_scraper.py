@@ -12,17 +12,16 @@ from unittest.mock import MagicMock, patch
 import pytest
 import requests
 
-from src.scraper.session_manager import SessionManager, USER_AGENTS
 from src.scraper.parsers import (
-    parse_job_listing_page,
-    parse_job_detail_page,
+    _extract_date,
+    _extract_monthly_salary,
+    _extract_salary_grade,
     extract_pagination_urls,
     extract_text,
-    _extract_salary_grade,
-    _extract_monthly_salary,
-    _extract_date,
+    parse_job_detail_page,
+    parse_job_listing_page,
 )
-
+from src.scraper.session_manager import USER_AGENTS, SessionManager
 
 # ─────────────────────────────────────────────────────────────────────────────
 # HTML Fixtures

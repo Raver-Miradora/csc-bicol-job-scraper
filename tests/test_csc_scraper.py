@@ -6,11 +6,11 @@ Run with:
     pytest tests/test_csc_scraper.py -v
 """
 
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock, call, patch
+
 import pytest
 
-from src.scraper.csc_scraper import CSCScraper, CAPTCHA_SIGNALS, MIN_VALID_CONTENT_LENGTH
-
+from src.scraper.csc_scraper import CAPTCHA_SIGNALS, MIN_VALID_CONTENT_LENGTH, CSCScraper
 
 # ── Shared HTML fixtures ───────────────────────────────────────────────────────
 
@@ -330,6 +330,7 @@ class TestFetchJobListingsWithDetails:
 
     def test_fetches_detail_pages(self):
         import requests
+
         # _collect_listing_urls fetches page 1 once, then _scrape_listing_page
         # fetches it again — so we need two listing responses before the details.
         patch_session(self.scraper, side_effect=[
@@ -344,6 +345,7 @@ class TestFetchJobListingsWithDetails:
 
     def test_falls_back_to_summary_if_detail_fails(self):
         import requests
+
         # Same double-fetch pattern for page 1
         patch_session(self.scraper, side_effect=[
             make_response(LISTING_PAGE_HTML),    # _collect_listing_urls

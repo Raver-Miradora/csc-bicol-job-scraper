@@ -6,13 +6,13 @@ Run with:
     pytest tests/test_database.py -v
 """
 
-import pytest
 from datetime import datetime, timedelta
 from unittest.mock import patch
 
+import pytest
+
 from src.storage.database import Database, compute_job_hash
 from src.storage.models import Job, NotificationRecord, TrackerStats
-
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
 

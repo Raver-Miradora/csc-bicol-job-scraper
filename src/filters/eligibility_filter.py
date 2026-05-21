@@ -6,6 +6,7 @@ Implemented in Phase 5: Filtering Logic.
 
 import re
 
+
 class EligibilityFilter:
     """Matches job eligibility requirements against CS Professional criteria."""
 
@@ -25,14 +26,14 @@ class EligibilityFilter:
         if not requirements:
             # If there's no requirement text at all, we might want to default to False
             return False
-            
+
         req_lower = requirements.lower()
-        
+
         # Exact substring matches
         for kw in self.CS_PROFESSIONAL_KEYWORDS:
             if kw in req_lower:
                 return True
-                
+
         # Word boundary match for "professional"
         if re.search(r'\bprofessional\b', req_lower):
             # Exclude sub-professional
@@ -48,7 +49,7 @@ class EligibilityFilter:
         """
         if not text:
             return []
-        
+
         # Simple split by common delimiters if it's a list
         parts = re.split(r'[,/|]|( or )|( and )', text)
         return [p.strip() for p in parts if p and p.strip() and p.strip() not in ('or', 'and')]
@@ -59,16 +60,16 @@ class EligibilityFilter:
         """
         if not salary_text:
             return 0
-            
+
         match = re.search(r'(?:salary\s*grade|sg)\s*[-:]?\s*(\d+)', salary_text, re.IGNORECASE)
         if match:
             try:
                 return int(match.group(1))
             except ValueError:
                 pass
-        
+
         # Also just look for a number if it's standalone like "18"
         if salary_text.strip().isdigit():
             return int(salary_text.strip())
-            
+
         return 0

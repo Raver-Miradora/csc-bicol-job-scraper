@@ -4,9 +4,10 @@ discord_notifier.py — Discord webhook integration with rich embeds.
 Implemented in Phase 7: Discord Notifications.
 """
 
-from discord_webhook import DiscordWebhook, DiscordEmbed
-from src.utils.logger import get_logger
+from discord_webhook import DiscordEmbed, DiscordWebhook
+
 from src.notifications.message_formatter import format_discord_embed
+from src.utils.logger import get_logger
 
 log = get_logger(__name__)
 
@@ -28,9 +29,9 @@ class DiscordNotifier:
             return False
 
         embed_data = self.create_embed(job_data)
-        
+
         webhook = DiscordWebhook(url=self.webhook_url)
-        
+
         embed = DiscordEmbed(
             title=embed_data.get('title'),
             description=embed_data.get('description'),
@@ -38,16 +39,16 @@ class DiscordNotifier:
         )
         if embed_data.get('url'):
             embed.set_url(embed_data.get('url'))
-            
+
         for field in embed_data.get('fields', []):
             embed.add_embed_field(
                 name=field['name'],
                 value=field['value'],
                 inline=field.get('inline', False)
             )
-            
+
         webhook.add_embed(embed)
-        
+
         try:
             response = webhook.execute()
             if response.status_code in (200, 204):

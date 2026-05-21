@@ -44,20 +44,20 @@ flowchart TD
     SC -->|Raw HTML| PA
     PA -->|Structured Dicts| SC
     SC -->|Job Summaries| TR
-    
+
     TR -->|Filter request| JM
     JM -->|Check Location| RF
     JM -->|Check SG & CS Prof| EF
     JM -->|Matches| TR
-    
+
     TR -->|Check Hash| DB
     TR -->|Insert New Jobs| DB
-    
+
     TR -->|Dispatch| TN
     TR -->|Dispatch| DN
     TN -->|Format HTML| MF
     DN -->|Format Embed| MF
-    
+
     TN -->|POST Message| TG
     DN -->|POST Webhook| DC
 ```

@@ -19,12 +19,12 @@ import hashlib
 from typing import Optional
 from urllib.parse import urljoin, urlparse
 
-from src.scraper.session_manager import SessionManager
 from src.scraper.parsers import (
-    parse_job_listing_page,
-    parse_job_detail_page,
     extract_pagination_urls,
+    parse_job_detail_page,
+    parse_job_listing_page,
 )
+from src.scraper.session_manager import SessionManager
 from src.utils.logger import get_logger
 
 log = get_logger(__name__)
