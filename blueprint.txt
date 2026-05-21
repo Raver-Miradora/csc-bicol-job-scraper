@@ -1,0 +1,70 @@
+<USER_REQUEST>
+This project folder is already cloned from my gituhb repo, now i will provide the details of the system and you will just read and understand it for now and dont do anyting else:
+
+read and understand this:
+
+
+🏛️ Philippine CSC Job Portal Tracker - System Blueprint
+Executive Summary
+We're building an intelligent, automated monitoring system for Philippine Civil Service Commission job postings with laser focus on Bicol Region (Region V) and Partido district opportunities. This system will act as a personal HR assistant, filtering for Career Service Professional-eligible positions and delivering real-time notifications.
+1. System Architecture & Data Flow Blueprint
+┌─────────────────────────────────────────────────────────────────┐
+│                     CSC JOB PORTAL TRACKER                      │
+└─────────────────────────────────────────────────────────────────┘
+
+┌──────────────┐      ┌──────────────┐      ┌──────────────┐
+│   EXTRACTION │ ───> │ TRANSFORMATION│ ───> │   STORAGE    │
+│              │      │   & FILTER    │      │              │
+└──────────────┘      └──────────────┘      └──────────────┘
+       │                     │                      │
+       │                     │                      │
+       v                     v                      v
+┌─────────────────────────────────────────────────────────────────┐
+│  CSC Portal        │  Pars
+<truncated 18636 bytes>
+ookies/CSRF tokens
+Regional office filters
+PDF attachments with job details
+Mitigation Strategy:
+
+Start with requests + BeautifulSoup
+If JS rendering required, add playwright or selenium
+Store session cookies properly
+B. Data Quality Challenges
+Inconsistent location formats ("Camarines Sur" vs "Cam. Sur")
+Varied eligibility descriptions
+Missing salary information
+Duplicate postings across pages
+Solution:
+
+Robust normalization in filters
+Fuzzy string matching for locations
+Store raw HTML for debugging
+C. Rate Limiting & Ethics
+Respect CSC servers: 2-5 second delays between requests
+Use single-threaded scraping
+Implement caching to minimize requests
+Add User-Agent identification
+D. Notification Best Practices
+Batch notifications if multiple jobs found
+Daily summary to avoid spam
+Include "unsubscribe" mechanism
+Link directly to application pages
+8. Success Metrics
+After deployment, the system should achieve:
+
+✅ Reliability: 99% uptime, automatic recovery from failures
+✅ Latency: Notify within 60 minutes of new job posting
+✅ Accuracy: 0% false negatives (never miss a matching job)
+✅ Precision: <5% false positives (minimize irrelevant notifications)
+✅ Performance: <1 minute per full scraping cycle
+Ready to Execute?
+This blueprint provides a complete architectural foundation. Each phase is self-contained with clear deliverables. The strict branch-PR-merge workflow ensures we trigger all desired GitHub achievements.
+Shall we proceed with Phase 0 (Quick Draw) and Phase 1 (Project Structure)? I'm ready to create the dummy issue, close it within 1 minute, then immediately start building the project foundation.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-05-21T10:57:50+08:00.
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from None to Claude Sonnet 4.6 (Thinking). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>
