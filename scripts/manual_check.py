@@ -6,12 +6,21 @@ Usage:
     python scripts/manual_check.py
 """
 
-# Full implementation will be added in Phase 9: CLI Interface
+import sys
+import asyncio
+from src.core.tracker import JobTracker
+from src.utils.logger import get_logger
 
+log = get_logger(__name__)
+
+async def run_manual_check():
+    log.info("Executing manual check...")
+    tracker = JobTracker()
+    await tracker.run_check(force_notify=True)
+    log.info("Manual check completed.")
 
 def main():
-    print("Manual check — will be implemented in Phase 9.")
-
+    asyncio.run(run_manual_check())
 
 if __name__ == "__main__":
     main()
