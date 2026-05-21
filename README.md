@@ -18,6 +18,8 @@
 - [Configuration](#configuration)
 - [Usage](#usage)
 - [How It Works](#how-it-works)
+- [Troubleshooting](#troubleshooting)
+- [Documentation](#documentation)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -178,6 +180,23 @@ CSC Portal ──► HTTP Scraper ──► HTML Parser ──► Region Filter 
 3. New jobs are filtered by region, district, and eligibility
 4. Matching jobs are saved to SQLite and notifications are sent
 5. A daily summary is delivered at a configurable time
+
+---
+
+## Troubleshooting
+
+- **No notifications sent but terminal says "NEW JOB FOUND"**: Ensure your `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` are valid in the `.env` file, and `enabled: true` is set in `config.yaml`.
+- **Database Locked Error**: This happens if multiple instances of the scraper are running simultaneously. Run `ps aux | grep python` and kill orphaned instances.
+- **Rate Limit Errors (HTTP 429)**: The CSC portal has rate limits. The built-in `SessionManager` handles this automatically, but if you consistently get banned, increase `check_interval_minutes` in your config.
+
+---
+
+## Documentation
+
+For deep-dives into the project, check out our comprehensive documentation folder:
+- [API Documentation](docs/API.md): Details on all internal python modules and classes.
+- [Architecture](docs/ARCHITECTURE.md): System design, data flow, and Mermaid diagrams.
+- [Deployment Guide](docs/DEPLOYMENT.md): Instructions for hosting the scraper on a Linux server using Systemd or PM2.
 
 ---
 
