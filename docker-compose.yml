@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  csc-scraper:
+    build: .
+    container_name: csc_scraper
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+      - ./.env:/app/.env
+    environment:
+      - TZ=Asia/Manila
