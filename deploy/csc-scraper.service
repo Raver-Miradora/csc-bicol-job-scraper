@@ -1,0 +1,14 @@
+[Unit]
+Description=CSC Bicol Job Scraper
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/csc-bicol-job-scraper
+ExecStart=/opt/csc-bicol-job-scraper/venv/bin/python main.py start
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

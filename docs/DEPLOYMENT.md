@@ -2,9 +2,35 @@
 
 This guide covers deployment instructions for setting up the CSC Bicol Job Scraper on a server for 24/7 monitoring.
 
-*Note: Phase 14 will automate much of this via Docker, but manual deployment is possible today.*
+## Option 1: Docker Compose (Recommended)
 
-## Option 1: Systemd Service (Linux/Ubuntu)
+The easiest and most reliable way to deploy the scraper is using Docker.
+
+1. Clone the repository to your server.
+2. Run the automated setup script:
+```bash
+./deploy/setup.sh
+```
+3. The script will create the necessary directories and a blank `.env` file. Edit the `.env` file to add your Telegram/Discord tokens.
+4. Restart the container to apply your tokens:
+```bash
+docker-compose restart csc-scraper
+```
+
+### Backups and Restores
+We provide scripts to easily backup and restore your SQLite database and configuration:
+
+```bash
+# Create a backup
+./deploy/backup.sh
+
+# Restore from a backup archive
+./deploy/restore.sh backups/20260521_120000.tar.gz
+```
+
+---
+
+## Option 2: Systemd Service (Linux/Ubuntu)
 
 The most robust way to run the scraper on a standard Linux VPS is using a `systemd` service.
 
@@ -43,7 +69,7 @@ sudo journalctl -u csc-scraper -f
 ```
 Or check the application's internal logs: `cat logs/tracker.log`
 
-## Option 2: PM2 (Node.js Process Manager)
+## Option 3: PM2 (Node.js Process Manager)
 
 If you already use PM2 on your server, you can manage this Python script easily:
 
@@ -56,7 +82,7 @@ pm2 save
 pm2 startup
 ```
 
-## Option 3: Cron Job (Headless Run)
+## Option 4: Cron Job (Headless Run)
 
 If you prefer to let Linux cron handle the scheduling rather than the internal `schedule` library:
 
