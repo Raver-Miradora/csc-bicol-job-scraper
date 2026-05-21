@@ -38,20 +38,22 @@ def format_discord_embed(job_data: dict) -> dict:
     job_url = job_data.get('job_url', '#')
 
     # Discord blue color: 0x3498db (3447003 in decimal)
-    # Default URL to CSC jobs page if none provided
     if job_url == '#':
         job_url = "https://csc.gov.ph/career/"
 
+    msg = f"📌 **Position:** {title}\n"
+    msg += f"🏢 **Agency:** {agency}\n"
+    msg += f"📍 **Location:** {location}\n"
+    msg += f"💰 **Salary:** SG {salary_grade} - {monthly_salary}\n"
+    msg += f"⏳ **Deadline:** {deadline}\n\n"
+    msg += f"[🔗 View Full Details & Apply]({job_url})"
+
     embed_dict = {
-        'title': f"🏛️ New Job Posting: {title}",
+        'title': "🏛️ New Job Posting",
         'url': job_url,
-        'description': f"A new job has been posted by the **{agency}**.",
+        'description': msg,
         'color': 3447003,
-        'fields': [
-            {'name': '📍 Location', 'value': location, 'inline': True},
-            {'name': '💰 Salary', 'value': f"SG {salary_grade} - {monthly_salary}", 'inline': True},
-            {'name': '⏳ Deadline', 'value': deadline, 'inline': True}
-        ]
+        'fields': []
     }
 
     return embed_dict
