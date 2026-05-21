@@ -29,7 +29,32 @@ def format_telegram_message(job_data: dict) -> str:
 
 def format_discord_embed(job_data: dict) -> dict:
     """Format a job posting as a Discord embed payload."""
-    raise NotImplementedError("Implemented in Phase 7.")
+    title = job_data.get('position_title', 'Unknown Position')
+    agency = job_data.get('agency', 'Unknown Agency')
+    location = job_data.get('location', 'Unknown Location')
+    salary_grade = job_data.get('salary_grade', 'N/A')
+    monthly_salary = job_data.get('monthly_salary', 'N/A')
+    deadline = job_data.get('application_deadline', 'Unknown Deadline')
+    job_url = job_data.get('job_url', '#')
+    
+    # Discord blue color: 0x3498db (3447003 in decimal)
+    # Default URL to CSC jobs page if none provided
+    if job_url == '#':
+        job_url = "https://csc.gov.ph/career/"
+
+    embed_dict = {
+        'title': f"🏛️ New Job Posting: {title}",
+        'url': job_url,
+        'description': f"A new job has been posted by the **{agency}**.",
+        'color': 3447003,
+        'fields': [
+            {'name': '📍 Location', 'value': location, 'inline': True},
+            {'name': '💰 Salary', 'value': f"SG {salary_grade} - {monthly_salary}", 'inline': True},
+            {'name': '⏳ Deadline', 'value': deadline, 'inline': True}
+        ]
+    }
+    
+    return embed_dict
 
 def format_daily_summary(jobs: list) -> str:
     """Format a daily summary of all new jobs found."""
