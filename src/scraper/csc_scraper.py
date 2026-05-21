@@ -35,13 +35,11 @@ DEFAULT_BASE_URL = "https://www.csc.gov.ph/career-opportunities/"
 
 # Strings that indicate a CAPTCHA / bot-protection page
 CAPTCHA_SIGNALS = [
-    "captcha",
-    "recaptcha",
-    "cloudflare",
+    "just a moment...",
+    "cf-browser-verification",
     "access denied",
     "bot protection",
-    "please verify",
-    "i am not a robot",
+    "please verify you are human",
     "ddos-guard",
 ]
 
