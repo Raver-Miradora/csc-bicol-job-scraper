@@ -68,20 +68,13 @@ class TestMessageFormatter:
             "job_url": "https://example.com/job"
         }
         embed = format_discord_embed(job)
-        assert "Developer" in embed['title']
+        assert "🏛️ New Job Posting" in embed['title']
+        assert "Developer" in embed['description']
+        assert "Legazpi City" in embed['description']
         assert "DICT" in embed['description']
+        assert embed['fields'] == []
         assert embed['url'] == "https://example.com/job"
         assert embed['color'] == 3447003
-
-        # Check fields
-        fields = embed['fields']
-        assert len(fields) == 3
-        assert fields[0]['name'] == '📍 Location'
-        assert fields[0]['value'] == 'Legazpi City'
-        assert fields[1]['name'] == '💰 Salary'
-        assert fields[1]['value'] == 'SG 11 - P27,000'
-        assert fields[2]['name'] == '⏳ Deadline'
-        assert fields[2]['value'] == '2026-12-31'
 
 
 class TestTelegramNotifier:

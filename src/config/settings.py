@@ -86,7 +86,6 @@ class Settings:
         return valid
 
 
-def load_config(config_path: str = "config/config.yaml") -> dict:
-    """Load and return the full configuration dictionary."""
-    settings = Settings(config_path)
-    return settings._config
+def load_config(config_path: str = "config/config.yaml") -> Settings:
+    """Load and return the Settings instance."""
+    return Settings(config_path)
