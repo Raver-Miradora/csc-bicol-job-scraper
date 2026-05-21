@@ -87,6 +87,19 @@ def setup_logger(
         encoding="utf-8",
     )
 
+    # ── Structured JSON File sink ─────────────────────────────────────────
+    json_log_file = str(Path(log_file).with_suffix(".json.log"))
+    logger.add(
+        json_log_file,
+        format="{message}",
+        level=level,
+        rotation=rotation,
+        retention=retention,
+        compression="zip",
+        enqueue=True,
+        serialize=True,
+    )
+
     _is_configured = True
     logger.info(
         "Logger initialised — level={level} file={file}",
@@ -104,3 +117,23 @@ def get_logger(name: str = "csc_tracker"):
         log.info("doing something")
     """
     return logger.bind(name=name)
+
+import time
+from contextlib import contextmanager
+
+@contextmanager
+def time_operation(operation_name: str):
+    """
+    Context manager to collect performance metrics for an operation.
+    Logs the execution time with structured data.
+    """
+    start_time = time.perf_counter()
+    try:
+        yield
+    finally:
+        elapsed = time.perf_counter() - start_time
+        logger.info(
+            f"Metrics: Operation '{operation_name}' completed in {elapsed:.3f}s",
+            metric_operation=operation_name,
+            metric_duration_s=elapsed
+        )
