@@ -100,9 +100,37 @@ class SessionManager:
     # ── Internal setup ────────────────────────────────────────────────────
 
     def _build_session(self) -> requests.Session:
-        """Create a requests.Session with a retry-enabled HTTPAdapter."""
-        session = requests.Session()
+        """Create a requests.Session with a retry-enabled HTTPAdapter and Cloudflare bypass."""
+        try:
+            import cloudscraper
+            # Create scraper first so it injects its perfect browser headers and custom TLS adapter
+            session = cloudscraper.create_scraper(
+                browser={'browser': 'chrome', 'platform': 'windows', 'desktop': True}
+            )
+            self._using_cloudscraper = True
+            log.debug("Cloudscraper enabled to bypass anti-bot protection.")
+        except ImportError:
+            session = requests.Session()
+            self._using_cloudscraper = False
+            log.warning("cloudscraper not installed. Scraping might return 403 Forbidden.")
+            
+            # Only set default headers if we are NOT using cloudscraper
+            session.headers.update(
+                {
+                    "Accept": (
+                        "text/html,application/xhtml+xml,application/xml;"
+                        "q=0.9,image/webp,*/*;q=0.8"
+                    ),
+                    "Accept-Language": "en-US,en;q=0.9,fil;q=0.8",
+                    "Accept-Encoding": "gzip, deflate, br",
+                    "Connection": "keep-alive",
+                    "Upgrade-Insecure-Requests": "1",
+                }
+            )
 
+        # Apply retry strategy to the existing adapters
+        # (WARNING: Do NOT use session.mount() here if cloudscraper is used,
+        # as it will overwrite cloudscraper's custom TLS adapter!)
         retry_strategy = Retry(
             total=self.max_retries,
             # Retry on these HTTP status codes (server-side transient errors)
@@ -112,23 +140,11 @@ class SessionManager:
             backoff_factor=self.backoff_factor,
             raise_on_status=False,
         )
-        adapter = HTTPAdapter(max_retries=retry_strategy)
-        session.mount("https://", adapter)
-        session.mount("http://", adapter)
+        
+        for prefix in ("http://", "https://"):
+            if prefix in session.adapters:
+                session.adapters[prefix].max_retries = retry_strategy
 
-        # Default headers for all requests
-        session.headers.update(
-            {
-                "Accept": (
-                    "text/html,application/xhtml+xml,application/xml;"
-                    "q=0.9,image/webp,*/*;q=0.8"
-                ),
-                "Accept-Language": "en-US,en;q=0.9,fil;q=0.8",
-                "Accept-Encoding": "gzip, deflate, br",
-                "Connection": "keep-alive",
-                "Upgrade-Insecure-Requests": "1",
-            }
-        )
         return session
 
     # ── Rate limiting ─────────────────────────────────────────────────────
@@ -149,6 +165,11 @@ class SessionManager:
 
     def rotate_user_agent(self) -> str:
         """Pick a random user-agent and apply it to the session headers."""
+        if getattr(self, '_using_cloudscraper', False):
+            # Cloudscraper strictly manages the user-agent to match its TLS fingerprint.
+            # Do not touch the headers.
+            return self._session.headers.get("User-Agent", "cloudscraper")
+            
         ua = random.choice(USER_AGENTS)
         self._session.headers["User-Agent"] = ua
         return ua
